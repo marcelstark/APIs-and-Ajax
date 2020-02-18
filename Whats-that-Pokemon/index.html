@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>What's that Pokemon?</title>
+	<meta charset="utf-8">
+	<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="menu">
+		<h2>Pokedex</h2>
+	</div>
+	<div id="sprites"></div>
+	<div id="info">
+		<h1 id="name"></h1>
+		<img src="">
+		<b>Types</b>
+		<ul id="types"></ul>
+		<b id="height">Height</b>
+		<b id="weight">Weight</b>
+	q</div>
+
+<script type="text/javascript">
+	function drawPoke(){
+		for (i=1;i<=151;i++){
+			$('#sprites').append("<img id='"+i+"'src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+i+".png'>");
+		}
+	}
+	$(document).ready(function(){
+		$('img').click(function(){
+			t=$(this)
+			$.getJSON("https://pokeapi.co/api/v2/pokemon/"+$(this).attr("id"),function(data){
+				$("ul").html("")
+				$("b").css("display","block")
+				$("#name").text(data.name);
+				$("#info img").attr("src",data.sprites.front_default);
+				for (i=0;data.types.length;i++){
+					$("ul#types").append("<li>"+data.types[i].type.name+"</li>")
+				}
+				$("b#height").after("<p>"+data.height+"</p>");})
+		});
+	});
+	drawPoke();
+</script>
+</body>
+</html>
