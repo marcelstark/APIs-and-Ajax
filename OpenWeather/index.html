@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<!-- bootstrap links -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid">
+	<header class="my-5 row">
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<a class="navbar-brand" href="#">
+			<img src="img/openweather.png" class="img-fluid w-25">
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<a class="navbar-brand" href="#">Mapas</a>
+			<form class="form-inline ml-auto mt-2 mt-md-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Ciudad" aria-label="Search" id="city">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+			</form>
+		</div>
+	</nav>
+	</header>
+<main class="mt-5 row">
+	<div class="row">
+		<div class="col-2 mt-3">
+			<img src="img/clouds-and-sun.png" id="weather" style="width: 100px; height: 100px;">
+		</div>
+		<div class="col-6 mx-auto mt-5">
+			<h1 id="temp"></h1>
+		</div>
+	</div>
+</main>
+</div>
+
+<script>
+	$(document).ready(function () {
+		//https://tile.openweathermap.org/map/pressure_new/10000/-72.60000000/-38.73000000.png?appid=b2dea11798ca558a359cd00cdb221405
+		//long: -72.6, lat: -38.73
+		//https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid={api_key}
+		$("#weather").hide();
+		$('form').submit(function () {
+			var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + $("#city").val() + '&&appid=b2dea11798ca558a359cd00cdb221405';
+			console.log(url);
+			$.get(url, function (res) {
+				$("#temp").html((parseInt(res.main.temp) - 273.15 + '').substr(0, 6) + '&#8451');
+				console.log(res)
+				if (res.weather[0].main == 'Clear')
+					$("#weather").attr('src', "img/heatwave.png");
+				if (res.weather[0].main == 'Clouds')
+					$("#weather").attr('src', "img/sunny.png");
+				$("#weather").show();
+			}, 'json');
+			return false;
+		});
+	});
+</script>
+</body>
+</html>
